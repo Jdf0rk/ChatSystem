@@ -1,6 +1,8 @@
 package gui;
 
 import main.*;
+import services.Adapter;
+
 import java.io.*;
 import java.util.*;
 
@@ -81,9 +83,11 @@ public class GUIView {
 	
 	public void messageReceivedNotification(String id){
 		// test if the chatbox window is opened
+		Adapter adapt = new Adapter(id);
+
 		if (userList != null){
 			if (!isChatOpen(id)){
-				ChatUserList.getInstance().getUser(id).incrementUnreadCount();
+				ChatUserList.getInstance().getUser(adapt.parse()).incrementUnreadCount();
 				userList.updateList();
 			}
 		}

@@ -43,16 +43,17 @@ public class ChatController {
 	
 	public void receiveMessage(Message message, InetAddress address){
 		
-		if ((userName != null) && (message.getSender() != null)){
-			
-			String userID = message.getSender() + "@" + address.toString();
+		if ((userName != null)){
+			Adapter adapt = new Adapter(message);
+
+			String userID = adapt.getSender() + "@" + address.toString();
 		
 			switch (message.getHeader()){
 				case bye:
+					userID = userList.getUserID(address);
 					// efface les messages de l'utilisateur
 					mediator.clearMessages(userID);
-					
-					userList.removeInstance(userID);
+					userList.removeInstance(address);
 					mediator.userListUpdated();
 					break;
 					
@@ -60,14 +61,12 @@ public class ChatController {
 					addNewUser(message, address);
 					
 					if (!mediator.getLocalAddresses().contains(address) && (userName != null))
-						mediator.sendMessage(Message.createHelloAck(userName), userList.getAddress(userID));
+						mediator.sendMessage(Message.createHelloAck(userName), address);
 					break;
 				case helloAck:
-					addNewUser(message, address);
+					System.out.println("On m'a répondu à mon bonjour !");
 					break;
 				case message:
-					addNewUser(message, address);
-					
 					// give the message to the GUIModel
 					if (message.getData().length() > 0)
 						mediator.updateMessage(message, userID);
@@ -80,9 +79,10 @@ public class ChatController {
 	
 	// add user to the list if it is not already inside 
 	private void addNewUser(Message message, InetAddress address){
+	Adapter adapt = new Adapter(message);
 		// if this application is not the source, add the user
-		if (!mediator.getLocalAddresses().contains(address) && message.getSender() != ""){
-			userList.addInstance(message.getSender(), address);
+		if (!mediator.getLocalAddresses().contains(address)){
+			userList.addInstance(adapt.getSender(), address);
 			mediator.userListUpdated();
 		}
 	}
@@ -91,7 +91,8 @@ public class ChatController {
 	public void createMessage(String destinationID, MessageStruct message){
 		Message msg = Message.createMessage( message.getMessage());
 		// give it to the NetworkNI
-		mediator.sendMessage(msg, userList.getAddress(destinationID));
+		Adapter adapt = new Adapter(destinationID);
+		mediator.sendMessage(msg, adapt.parse());
 	}
 	
 	public void logged(String name){

@@ -47,7 +47,7 @@ public class ChatGUI {
 	
 	public void openChatbox(ChatUserInfo info){
 		view.openChatbox(info);
-		ChatUserList.getInstance().getUser(info.getUserID()).resetUnreadCount();
+		ChatUserList.getInstance().getUser(info.getAddress()).resetUnreadCount();
 		view.updateUserList();
 	}
 	
@@ -94,8 +94,8 @@ public class ChatGUI {
 	}
 	
 	public void updateMessage(Message msg, String id){
-
-		MessageStruct tmpMessage = new MessageStruct(msg.getSender(), msg.getData());
+		Adapter adapt = new Adapter(msg);
+		MessageStruct tmpMessage = new MessageStruct(adapt.getSender(), msg.getData());
 		model.addMessage(id, tmpMessage);
 		view.messageReceivedNotification(id);
 	}

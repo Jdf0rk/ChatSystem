@@ -18,36 +18,42 @@ public class ChatUserList {
 	}
 	
 	// HashMap for storing user's information
-	private HashMap<String, ChatUserInfo> userList;
+	private HashMap<InetAddress, ChatUserInfo> userList;
 	
 	public void eraseUserList(){
 		userList.clear();
 	}
 	
-	public ChatUserInfo getUser(String userID){
+	public ChatUserInfo getUser(InetAddress userID){
 		return userList.get(userID);
 	}
 	
 	// look for the element
-	public boolean isInside(String userID){
+	public boolean isInside(InetAddress userID){
 		return userList.containsKey(userID);
 	}
 	
 	// add an instance
 	public synchronized void addInstance(String username, InetAddress address){
-		String tmpID = username + "@" + address.toString();
-		if (!userList.containsKey(tmpID))
-			userList.put(tmpID, new ChatUserInfo(username, address));
+		if (!userList.containsKey(address))
+			userList.put(address, new ChatUserInfo(username, address));
 	}
 	
 	// remove an instance
-	public void removeInstance(String userID){
+	public void removeInstance(InetAddress userID){
 		userList.remove(userID);
 	}
 	
-	public InetAddress getAddress(String userID){
+	public InetAddress getAddress(InetAddress userID){
 		if (userList.containsKey(userID))
 			return userList.get(userID).getAddress();
+		else
+			return null;
+	}
+
+	public String getUserID(InetAddress address){
+		if (userList.containsKey(address))
+			return userList.get(address).getUserID();
 		else
 			return null;
 	}
