@@ -143,13 +143,10 @@ public class ViewUserList extends JFrame implements ActionListener{
 				
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					// TODO Auto-generated method stub
-					
 				}
 				
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					// TODO Auto-generated method stub
 					ChatGUI.getInstance().openChatbox(user);
 				}
 			});

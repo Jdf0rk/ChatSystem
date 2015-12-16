@@ -1,5 +1,7 @@
 package gui;
 
+import main.ChatUserInfo;
+
 import java.util.*;
 
 // stores data from the controller
@@ -38,10 +40,10 @@ public class GUIModel {
 	 * 
 	 */
 	
-	private HashMap<String, Vector<MessageStruct>> conversationList = new HashMap<>();
+	private HashMap<ChatUserInfo, Vector<MessageStruct>> conversationList = new HashMap<>();
 	
 	// get the list of the messages
-	public Vector<MessageStruct> getMessages(String opponent){
+	public Vector<MessageStruct> getMessages(ChatUserInfo opponent){
 		if (conversationList.containsKey(opponent))
 			return conversationList.get(opponent);
 		else
@@ -50,7 +52,7 @@ public class GUIModel {
 	
 	// add one new message to the list
 	// only one thread can use this method at a time
-	public synchronized void addMessage(String opponentID, MessageStruct message){
+	public synchronized void addMessage(ChatUserInfo opponentID, MessageStruct message){
 		// if the conversation does not exists, create a new one
 		if (!conversationList.containsKey(opponentID)){
 			// create a new conversation list

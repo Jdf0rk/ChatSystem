@@ -1,12 +1,9 @@
 package gui;
 
 import main.*;
-import services.Adapter;
+//import services.Adapter;
 
-import java.io.*;
 import java.util.*;
-
-import javax.swing.JFileChooser;
 
 // generate an output presentation based on the model
 
@@ -14,11 +11,11 @@ public class GUIView {
 
 	private static GUIView instance;
 	private ChatGUI controller;
-	private HashMap<String, ViewChatBox> chatBox;
+	private HashMap<ChatUserInfo, ViewChatBox> chatBox;
 	
 	private GUIView(ChatGUI chatGUI) {
 		controller = chatGUI;
-		chatBox = new HashMap<String, ViewChatBox>();
+		chatBox = new HashMap<ChatUserInfo, ViewChatBox>();
 	}
 
 	public static GUIView getInstance() {
@@ -46,20 +43,20 @@ public class GUIView {
 	
 	public void openChatbox(ChatUserInfo info){
 		//multiton pattern
-		if (!isChatOpen(info.getUserID())){
-			chatBox.put(info.getUserID(), new ViewChatBox(info));
+		if (!isChatOpen(info)){
+			chatBox.put(info, new ViewChatBox(info));
 		}
 	}
 	
-	public ViewChatBox getChatBox(String id){
+	public ViewChatBox getChatBox(ChatUserInfo id){
 		return chatBox.get(id);
 	}
 	
-	public boolean isChatOpen(String id){
+	public boolean isChatOpen(ChatUserInfo id){
 		return chatBox.containsKey(id);
 	}
 	
-	public void closeChatBox(String id){
+	public void closeChatBox(ChatUserInfo id){
 		chatBox.remove(id);
 	}
 	
@@ -81,13 +78,13 @@ public class GUIView {
 		}
 	}
 	
-	public void messageReceivedNotification(String id){
+	public void messageReceivedNotification(ChatUserInfo id){
 		// test if the chatbox window is opened
-		Adapter adapt = new Adapter(id);
+		//Adapter adapt = new Adapter(id);
 
 		if (userList != null){
 			if (!isChatOpen(id)){
-				ChatUserList.getInstance().getUser(adapt.parse()).incrementUnreadCount();
+				ChatUserList.getInstance().getUser(id.getAddress()).incrementUnreadCount();
 				userList.updateList();
 			}
 		}

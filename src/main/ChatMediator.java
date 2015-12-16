@@ -79,8 +79,8 @@ public class ChatMediator {
 		gui.userListUpdated();
 	}
 	
-	public void createMessage(String destinationID, MessageStruct message){
-		controller.createMessage(destinationID, message);
+	public void createMessage(ChatUserInfo ID, MessageStruct message){
+		controller.createMessage(ID, message);
 	}
 	
 	public void messageReceived(Message msg, InetAddress addr){
@@ -91,7 +91,7 @@ public class ChatMediator {
 		gui.clearMessages(opponentID);
 	}
 	
-	public void updateMessage(Message msg, String id){
+	public void updateMessage(Message msg, ChatUserInfo id){
 		gui.updateMessage(msg, id);
 	}
 	

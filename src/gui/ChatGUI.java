@@ -86,16 +86,16 @@ public class ChatGUI {
 	}
 	
 	// will control if the message is empty or not
-	public void sendMessage(String msg, String opponentID){
+	public void sendMessage(String msg, ChatUserInfo opponentID){
 		String userName = mediator.getUserName();
 		MessageStruct message = new MessageStruct(userName, msg);
 		model.addMessage(opponentID, message);
 		mediator.createMessage(opponentID, message);
 	}
 	
-	public void updateMessage(Message msg, String id){
-		Adapter adapt = new Adapter(msg);
-		MessageStruct tmpMessage = new MessageStruct(adapt.getSender(), msg.getData());
+	public void updateMessage(Message msg,ChatUserInfo id){
+
+		MessageStruct tmpMessage = new MessageStruct(id.getUsername(), msg.getData());
 		model.addMessage(id, tmpMessage);
 		view.messageReceivedNotification(id);
 	}

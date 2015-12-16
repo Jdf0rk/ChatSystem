@@ -27,7 +27,7 @@ public class ViewChatBox implements ActionListener {
 	 * Initialize the contents of the frame.
 	 */
 	
-	private String id;
+	private ChatUserInfo id;
 	private String sourceName;
 	private JTextPane messageArea;
 	private JButton sendButton;
@@ -39,7 +39,7 @@ public class ViewChatBox implements ActionListener {
 	private void initialize(ChatUserInfo info) {
 		
 		sourceName = info.getUsername();
-		id = info.getUserID();
+		id = info;
 		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 471, 316);

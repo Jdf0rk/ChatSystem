@@ -44,9 +44,9 @@ public class ChatController {
 	public void receiveMessage(Message message, InetAddress address){
 		
 		if ((userName != null)){
-			Adapter adapt = new Adapter(message);
+			//Adapter adapt = new Adapter(message);
 
-			String userID = adapt.getSender() + "@" + address.toString();
+			String userID = address.toString();
 		
 			switch (message.getHeader()){
 				case bye:
@@ -64,12 +64,16 @@ public class ChatController {
 						mediator.sendMessage(Message.createHelloAck(userName), address);
 					break;
 				case helloAck:
+					addNewUser(message, address);
 					System.out.println("On m'a répondu à mon bonjour !");
 					break;
 				case message:
+					ChatUserInfo info = userList.getUser(address);
+					if (info == null)
+					System.out.println("WTF");
 					// give the message to the GUIModel
 					if (message.getData().length() > 0)
-						mediator.updateMessage(message, userID);
+						mediator.updateMessage(message, info);
 					break;
 				default:
 					break;
@@ -79,20 +83,21 @@ public class ChatController {
 	
 	// add user to the list if it is not already inside 
 	private void addNewUser(Message message, InetAddress address){
-	Adapter adapt = new Adapter(message);
+	//Adapter adapt = new Adapter(message);
 		// if this application is not the source, add the user
 		if (!mediator.getLocalAddresses().contains(address)){
-			userList.addInstance(adapt.getSender(), address);
+
+			userList.addInstance(message.getData(), address);
 			mediator.userListUpdated();
 		}
 	}
 	
 	// will create a message to send
-	public void createMessage(String destinationID, MessageStruct message){
+	public void createMessage(ChatUserInfo ID, MessageStruct message){
 		Message msg = Message.createMessage( message.getMessage());
 		// give it to the NetworkNI
-		Adapter adapt = new Adapter(destinationID);
-		mediator.sendMessage(msg, adapt.parse());
+		//Adapter adapt = new Adapter(destinationID);
+		mediator.sendMessage(msg, ID.getAddress());
 	}
 	
 	public void logged(String name){
